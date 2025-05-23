@@ -84,10 +84,41 @@ select 	job_id*12
 from employees;
 
 select 	first_name, last_name,
-		concat(first_name, last_name) as 전체이름,
+		(first_name, last_name) as 전체이름,
         concat(first_name, '-' , last_name) as '전체-이름',
         concat(first_name, ' ' , last_name) as '전체 이름',
 		concat(first_name, ' ' , last_name, ' 입사일은 ', hire_date , ' 입니다.') as 문장    -- 황일영 입사일은 2024-01-01 입니다.
 from employees;
 
--- 전체직원의 정보를 다음과 같이 출력하세요		
+-- *전체직원의 정보를 다음과 같이 출력하세요	
+
+select 	concat(first_name,'-', last_name) as 성명,
+		phone_number as 전화번호,
+		salary*12 as 연봉,
+		salary as 월급,        
+        salary*12+5000 as 연봉보너스포함        
+from employees;
+
+-- 테이블의 컬럼명🡪테이블의 데이터, 문자열,숫자는 그대로 출력 
+
+select first_name,
+	   salary,
+       '(주) 개발자' as company,
+       3+5 as no
+from employees;
+
+-- MySQL은 테이블명을 생략할 수 있다. (오라클은 안됨)
+
+select 	'(주)개발자' as company
+from employees;     -- employees 테이블의 데이타가 107개
+
+select '(주)개발자'
+from dual;           -- 데이터가 없는 가상의 테이블
+
+select now()
+from regions;        -- 데이터의 갯수만큼 출력
+
+select now() as 현재시간
+from dual;           -- 가상의 테이블 사용
+
+select now() as 현재시간;     -- from절을 생략할 수 있음(오라클에서는 생략안됨)
