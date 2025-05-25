@@ -68,7 +68,7 @@ select 	employee_id as '사 번',
 from employees;
 
 -- *산술 연산자 사용하기*
--- 정수/정수 소수점까지 계산됨
+-- *정수/정수 소수점까지 계산됨
 select 	first_name,
 		salary 월급,
         salary-100 as '월급-식대',
@@ -79,36 +79,33 @@ select 	first_name,
         employee_id/3 정수나누기
 from employees;
 
--- 연산시 문자열은 0으로 처리 --> 오류가 나지 않으므로 주의
+-- *연산시 문자열은 0으로 처리 --> 오류가 나지 않으므로 주의
 select 	job_id*12
 from employees;
 
 select 	first_name, last_name,
-		(first_name, last_name) as 전체이름,
+		concat(first_name, last_name) as 전체이름,
         concat(first_name, '-' , last_name) as '전체-이름',
         concat(first_name, ' ' , last_name) as '전체 이름',
 		concat(first_name, ' ' , last_name, ' 입사일은 ', hire_date , ' 입니다.') as 문장    -- 황일영 입사일은 2024-01-01 입니다.
 from employees;
 
--- *전체직원의 정보를 다음과 같이 출력하세요	
-
-select 	concat(first_name,'-', last_name) as 성명,
-		phone_number as 전화번호,
-		salary*12 as 연봉,
-		salary as 월급,        
-        salary*12+5000 as 연봉보너스포함        
+-- 전체직원의 정보를 다음과 같이 출력하세요
+select	concat(first_name,'-',last_name) as 성명,
+		salary as 월급,
+        salary*12 as 연봉,
+        salary*12+5000 as 보너스,
+        phone_number as 전화번호
 from employees;
 
--- 테이블의 컬럼명🡪테이블의 데이터, 문자열,숫자는 그대로 출력 
-
-select first_name,
-	   salary,
-       '(주) 개발자' as company,
-       3+5 as no
+-- *테이블의 컬럼명테이블의 데이터,  문자열,숫자는 그대로 출력 
+select 	first_name,
+		salary,
+        '(주)개발자' as company,
+        3+5 as no
 from employees;
 
 -- MySQL은 테이블명을 생략할 수 있다. (오라클은 안됨)
-
 select 	'(주)개발자' as company
 from employees;     -- employees 테이블의 데이타가 107개
 
