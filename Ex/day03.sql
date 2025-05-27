@@ -292,3 +292,4 @@ select 	first_name
 		manager_id,
         ifnull(manager_id, '매니저없음')
 from employees;
+ 
