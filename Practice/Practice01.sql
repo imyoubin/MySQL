@@ -33,7 +33,7 @@ order by max_salary desc
 */
 select first_name,
 	   manager_id,
-       commission_pct
+       commission_pct,
        salary
 from employees
 where commission_pct is null
