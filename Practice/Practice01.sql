@@ -33,7 +33,11 @@ order by max_salary desc
 */
 select first_name,
 	   manager_id,
+<<<<<<< HEAD
        commission_pct,
+=======
+       commission_pct
+>>>>>>> branch 'master' of https://github.com/imyoubin/MySQL.git
        salary
 from employees
 where commission_pct is null
