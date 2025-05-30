@@ -171,7 +171,7 @@ select 	first_name,
 from employees
 where department_id = 110 
 ;
-
+/*
 -- 2) 8300보다 많은 직원( 8300보다 많은 또는 12008 보다 많은 )
 -- 2-1) where절
 
@@ -196,7 +196,7 @@ where salary >=any (select salary
 					from employees
 					where department_id = 110 )
 ;
-
+*/
 -- 부서번호가 110인 직원의 월급 중 
 -- 가장 많은 월급 보다 월급이 많은 모든 직원의 
 -- 이름, 급여를 출력하세요.(and연산--> 12008보다 큰)
@@ -302,7 +302,7 @@ from locations;
 (20, 13000)
 (30, 11000)
 */
-
+/*
 -- 2) 전체구조
 select *
 from employees e,  가상의테이블 s
@@ -315,7 +315,7 @@ from employees e
 where e.department_id = 20
 and e.salary = 6000
 ;
-
+*/
 -- 각 부서별로 최고급여를 받는 사원을 출력하세요 
 select  department_id,
 		max(salary)
@@ -362,4 +362,187 @@ from employees e, (select  department_id,
 					group by department_id) s
 where e.department_id = s.department_id
 and e.salary = s.maxsalary
+;
+
+-- ------------------------------------------------
+# limit
+-- ------------------------------------------------
+-- 직원관리 페이지,   
+-- 사번이 작은 직원이 위쪽에 출력(요구사항에 있었음)
+-- -->자동으로 정렬(믿으면안됨)되더라도 꼭 order by 절로 정렬해줘야함
+-- *1페이지의 데이터만 가져오기(1페이지에 5개)
+/*
+(0, 5)  --> 1번부터 5개 
+(5, 10)  --> 6번부터 5개  
+(10, 10)  --> 11번부터 5개  
+*/ 
+ 
+select 	employee_id,
+		first_name,
+        salary
+from employees
+order by employee_id asc
+limit 0, 5      -- 첫번째부터 5개
+;
+
+select 	employee_id,
+		first_name,
+        salary
+from employees
+order by employee_id asc
+limit 5, 5      -- 6번째부터 5개
+;
+
+select 	employee_id,
+		first_name,
+        salary
+from employees
+order by employee_id asc
+limit 10, 5      -- 10번째부터 5개
+;
+-- ------------------
+-- * 0 생략
+select 	employee_id,
+		first_name,
+        salary
+from employees
+order by employee_id asc
+limit 7      -- 처음부터 7개
+;
+-- ------------------
+-- *다른표현
+select 	employee_id,
+		first_name,
+        salary
+from employees
+order by employee_id asc
+limit 5 offset 0      -- 첫번째부터 5개
+;
+
+select 	employee_id,
+		first_name,
+        salary
+from employees
+order by employee_id asc
+limit 5 offset 5      -- 6번째부터 5개
+;
+
+select 	employee_id,
+		first_name,
+        salary
+from employees
+order by employee_id asc
+limit 5 offset 10      -- 11번째부터 5개
+;
+
+
+-- 07년에 입사한 직원중 급여가 많은 직원중 3에서 7등의 이름 급여 입사일은? 
+-- 1)전체확인
+select *
+from employees
+;
+
+-- 2)20007년 입사자만 조회
+select *
+from employees
+where hire_date >= '2007-01-01'
+and hire_date < '2008-01-01'
+;
+
+-- 3)월급이 큰 사람부터 내림차순 정렬
+select *
+from employees
+where hire_date >= '2007-01-01'
+and hire_date < '2008-01-01'
+order by salary desc
+;
+
+-- 4) 3번째 부터 5명 출력
+select *
+from employees
+where hire_date >= '2007-01-01'
+and hire_date < '2008-01-01'
+order by salary desc
+limit 2, 5
+;
+
+
+-- 5) 출력컬럼 결정
+select 	first_name,
+		hire_date,
+        salary
+from employees
+where hire_date >= '2007-01-01'
+and hire_date < '2008-01-01'
+order by salary desc
+limit 2, 5
+;
+
+-- ------------------------------------
+-- 
+select 	first_name,
+		hire_date
+from employees
+where hire_date >= '2007-01-01'
+and hire_date < '2008-01-01'
+order by hire_date asc
+;
+
+select 	first_name,
+		hire_date
+from employees
+where hire_date between '2007-01-01' and '2008-01-01'
+order by hire_date asc
+;
+select 	first_name,
+		hire_date,
+        date_format(hire_date, '%Y')
+from employees
+where date_format(hire_date,'%y') = '2007'
+order by hire_date asc
+;
+
+-- ----------------------------------------
+-- 부서번호가 100인 직원중 월급이 가장 많이 받는 직원의 이름, 월급, 부서번호 출력
+ -- 서번호가 100인 직원
+ select *
+ from employees
+ where department_id =100
+ ;
+ -- 부서번호가 100인 직원중 월급이 가장 많이 받는 직원
+  select max(salary) 
+		-- first_name 안됨(107개)
+ from employees
+ where department_id =100
+ ;
+ 
+ select *
+ from employees
+ where salary =12008
+ and department_id=100
+ ;
+ 
+ -- 서브쿼리 적용
+ 
+select 	first_name,
+		salary,
+        department_id
+from employees
+where department_id = 100 
+and salary=(select max(salary)
+			from employees
+			where department_id=100
+and department_id =100
+)   
+;
+-- --------------------------------
+-- limit 적용
+
+select 	first_name,
+		salary,
+        department_id
+from employees
+where department_id =100
+order by salary asc
+limit 0,1
 ;

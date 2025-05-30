@@ -4,10 +4,22 @@
 (56건)
 */
 
-select 	salary		
+select 	avg(salary)		
 from employees
-where first_name
 ;
+
+select count(*)
+from employees
+where salary < 6400
+;
+
+select count(*)
+from employees
+where salary < (select 	avg(salary)		
+				from employees
+)
+;
+
 /*
 문제2. 
 평균월급 이상, 최대월급 이하의 월급을 받는 사원의
@@ -16,6 +28,27 @@ where first_name
 (51건)
 */
 
+select 	avg(salary)
+	
+from employees
+;
+select	employee_id,
+		first_name,
+		salary
+from employees
+order by salary asc
+;
+
+select	employee_id,
+		first_name,
+		salary,
+        (select avg(salary) from employees),
+        (select max(salary) from employees)
+from employees
+where salary >=(select avg(salary) from employees)
+and salary <=(select max(salary) from employees)
+order by salary asc
+;
 /*
 문제3.
 직원중 Steven(first_name) king(last_name)이 소속된 부서(departments)가 있는 곳의 주소
@@ -25,13 +58,55 @@ where first_name
 (1건)
 */
 
+select 	e.first_name,
+		e.last_name,
+        d.department_name,
+        l.street_address,
+        l.postal_code,
+        l.city,
+        l.state_province
+from employees e
+inner join departments d
+on e.employee_id=d.department_id
+inner join locations l
+on d.location_id=l.location_id
+where e.first_name='Steven'
+and e.last_name='king'
+;
+
+
 /*
 문제4.
 job_id 가 'ST_MAN' 인 직원의 월급보다 작은 직원의 사번,이름,월급을 월급의 내림차순으로
 출력하세요 -ANY연산자 사용
 (74건)
 */
+-- 1)job_id 가 'ST_MAN' 인 직원
+select *
+from employees
+where job_id ='st_man'
+order by salary desc
+;
+-- 2)job_id 가 'ST_MAN' 인 직원의 월급보다 작은 직원의 사번,이름,월급을 월급의 내림차순으로 정렬
+select 	employee_id,
+		first_name,
+        salary
+from employees
+where job_id = 'st_man'
 
+;
+-- 3) 1,2 합치기
+select  employee_id,
+		first_name,      
+		salary
+from employees
+where salary < any (select salary
+					from employees
+					where job_id = 'st_man'
+					order by salary desc
+)
+
+;
 /*
 문제5. 
 각 부서별로 최고의 월급을 받는 사원의 직원번호(employee_id), 이름(first_name)과 월급
@@ -40,7 +115,39 @@ job_id 가 'ST_MAN' 인 직원의 월급보다 작은 직원의 사번,이름,�
 조건절비교, 테이블조인 2가지 방법으로 작성하세요
 (11건)
 */
+-- 1)각 부서별로 최고의 월급을 받는 사원의 직원번호(employee_id), 이름(first_name)과 
+-- 월급(salary) 부서번호(department_id)를 조회 조건절비교, 테이블조인 2가지 방법으로 작성
+select 	employee_id,
+		first_name,
+        salary,
+        department_id
+from employees e
+where department_id=e.department_id
+order by  salary desc
+;
+-- 2)조회결과는 월급의 내림차순으로 정렬되어 나타나야 합니다.
 
+select employee_id,
+		first_name,
+        salary,
+        department_id
+from employees e 
+
+;
+-- 3) 1,2 합치기
+
+select  employee_id,
+		first_name,
+		salary,
+		department_id
+from employees e
+where salary = (select max(salary)
+				from employees
+				where department_id = e.department_id
+                order by  salary desc
+)
+
+;
 /*
 문제6.
 각 업무(job) 별로 월급(salary)의 총합을 구하고자 합니다. 
@@ -48,16 +155,58 @@ job_id 가 'ST_MAN' 인 직원의 월급보다 작은 직원의 사번,이름,�
 (19건)
 */
 
+select 	j.job_title,
+		sum(e.salary) as '월급 총합'
+from employees e
+inner join jobs j
+on e.job_id=j.job_id
+group by job_title
+order by '월급 총합' desc
+;
 /*
 문제7.
 자신의 부서 평균 월급보다 월급(salary)이 많은 직원의 직원번호(employee_id), 이름
 (first_name)과 월급(salary)을 조회하세요
 (38건)
 */
+-- 1)자신의 부서 평균 월급보다 월급(salary)
+select 	avg(salary)
+from employees e
+where department_id=e.department_id
+and e.department_id is not null
+;
 
+-- 2) 직원의 직원번호(employee_id), 이름(first_name)과 월급(salary)을 조회
+select 	employee_id,
+		first_name,
+        salary
+from employees e
+where e.salary>(6456.754717)
+
+;
+
+-- 3) 1,2 합치기
+select 	employee_id,
+		first_name,
+        salary
+from employees e
+where e.salary>(select	avg(salary)
+				from employees e
+				where department_id=e.department_id
+                and e.department_id is not null
+)
+
+;
 /*
 문제8.
 직원 입사일이 11번째에서 15번째의 직원의 사번, 이름, 월급, 입사일을 입사일 순서로 출력
 하세요
 */
 
+select	employee_id,
+		first_name,
+		salary,
+		hire_date
+from employees
+order by hire_date asc
+limit 5 offset 10

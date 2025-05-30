@@ -137,3 +137,8 @@ from employees
 가장 오래 근속한 직원의 입사일은 언제인가요? 다음 형식으로 출력해주세요.
 예) 2005년 08월 20일(토요일)
 */
+
+select date_format(min( hire_date), '%y년 %m월 %d일') 
+		
+from employees
+;
