@@ -53,20 +53,20 @@ where e.salary =(24000)
 ;
 
 -- 3) 1,2 합치기
-select 	employee_id,
-		first_name,
-        salary ,
-        date_format(e.hire_date, '%Y-%m-%d %W') '입사일', 
-        concat(	substr( e.phone_number, 1,3),'-',
-				substr( e.phone_number, 5,3),'-',
-                substr( e.phone_number, 9)), '전화번호',
-                e.department_id          
+select 	e.employee_id,
+		e.first_name,
+		e.salary,
+		date_format(e.hire_date, '%Y-%m-%d %W') AS 입사일,
+		concat(	substr(e.phone_number, 1, 3), '-', 
+				substr(e.phone_number, 5, 3), '-', 
+				substr(e.phone_number, 9)) AS 전화번호,
+    e.department_id
 from employees e
-where e.salary =(select max(salary)
-				from employees e
-				where department_id=e.department_id
-				and e.department_id is not null
-				order by e.salary desc
+where e.salary = (select max(salary)
+					from employees
+					where department_id = e.department_id
+                    and e.department_id is not null
+					order by e.salary desc
 )
 ;
 /*
