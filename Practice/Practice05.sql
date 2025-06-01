@@ -81,7 +81,19 @@ where e.salary = (select max(salary)
 (9건)
 */
 
-
+select  e.manager_id,
+		m.first_name,
+		round(avg(e.salary), 0) as a_salary,
+		max(e.salary),
+		min(e.salary)
+from employees e
+inner join employees m
+on e.manager_id = m.employee_id
+where e.hire_date >= '2005-01-01'
+group by e.manager_id, m.first_name
+having round(avg(e.salary), 0) >= 5000
+order by a_salary desc
+;
 /*
 문제4.
 각 사원(employee)에 대해서 사번(employee_id), 이름(first_name), 
@@ -91,21 +103,49 @@ where e.salary = (select max(salary)
 (106명)
 */
 
-
+select  e.employee_id,
+		e.first_name,
+		d.department_name,
+		m.first_name
+from employees e
+left join departments d
+    on e.department_id = d.department_id
+inner join employees m
+    on e.manager_id = m.employee_id
+order by e.employee_id;
 /*
 문제5.
 2005년 이후 입사한 직원중에 입사일이 11번째에서 20번째의 직원의
 사번, 이름, 부서명, 월급, 입사일을 입사일 순서로 출력하세요
 */
 
-
+select 	e.employee_id,
+		e.first_name,
+        d.department_name,
+        e.salary,
+        e.hire_date
+from employees e
+left join departments d
+on e.department_id=d.department_id
+where e.hire_date >='2005-01-01'
+limit 10 offset 10
+;
 /*
 문제6.
 가장 늦게 입사한 직원의 이름(first_name last_name)과 월급(salary)과 근무하는 부서 이름
 (department_name)은?
 */
 
-
+select 	e.first_name,
+		e.last_name,
+        e.salary,
+        d.department_name
+from employees e
+left join departments d
+on d.department_id=d.department_id
+order by e.hire_date desc
+limit 1
+;
 /*
 문제7.
 평균월급(salary)이 가장 높은 부서 직원들의 직원번호(employee_id), 이름(firt_name), 성
