@@ -6,6 +6,7 @@
 drop table author;
 drop table book;
 
+use web_db;
 -- 테이블 리스트 보기
 show tables;
 
