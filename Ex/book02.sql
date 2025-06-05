@@ -1,42 +1,31 @@
--- web_db 접속
+
+-- 데이터베이스 선택
 use web_db;
 
--- 테이블 리스트보기
-show databases;
+-- 기존 테이블 삭제 
+drop table author;
+drop table book;
 
--- 테스트
-select *
-from book
-;
 
--- select 데이터
-select 	book_id,
-		book_title,
-		book_pubs,
-		book_pubDate,
-		book_authorId,
-		book_name,
-        book_desc
-from book
-;
+-- 전체 테이블 조회
+select * from author;
+select * from book;
 
--- 데이터 보기
-insert into book
-values(null, '우리들의 일그러진 영웅', '다림', '1988-02-22', 1)
-;
+-- 조인하여 책 + 작가 정보 보기
+select  bo.book_id,
+		bo.title,
+		bo.pubs,
+		date_format(bo.pub_date, '%y-%m-%d') AS pub_date,
+		au.author_id,
+		au.author_name,
+		au.author_desc
+from book bo
+join author au 
+on bo.author_id = au.author_id;
 
--- 데이터 삭제
-delete from book
-where book_id=3
-;
+select	author_id, 
+	    author_name,
+        author_desc 
+from author 
+where author_id ;
 
--- 데이터 업데이트
-update  book
- set	book_title
-		book_pubs
-		book_pubDate
-		book_authorId
-		book_name
-		book_desc
-where	book_id
-;

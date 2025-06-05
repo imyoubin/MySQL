@@ -4,11 +4,22 @@ show databases;
 -- web_db 접속
 use web_db;
 
+-- 테이블 삭제
+drop table author;
+drop table book;
+
 -- 테이블 리스트보기
-show databases;
+show tables;
 -- 테스트
 select *
 from author;
+
+-- #작가 테이블 만들기
+create table author(
+	author_id 	int 		 primary key,  
+    author_name varchar(100) not null,
+    author_desc varchar(500)
+);
 
 select 	author_id,
 		author_name,
