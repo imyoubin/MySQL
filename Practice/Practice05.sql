@@ -273,8 +273,26 @@ having avg(e.salary)=(select max(avg.salary)
 평균 월급(salary)이 가장 높은 업무와 평균월급은? (limt사용하지 말고 그룹함수 사용할 것)
 */
 
+select max(avg(salary))
+from employees
+group by job_id
+;
 
+select 	job_id,
+		salary
+from employees
+group by job_id
+having avg(salary)=(6200)
+;
 
+select 	job_id,
+		salary
+from employees
+group by job_id
+having avg(salary)=(select max(avg(salary))
+						from employees
+						group by job_id
+);
 
 
 

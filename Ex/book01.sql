@@ -42,3 +42,9 @@ set author_name = '이효리',
 	author_desc = '제주도'
 where author_id = 2
 ;
+
+create table author (
+    author_id int primary key auto_increment,
+    author_name varchar(100) not null,
+    author_desc varchar(500)
+);
